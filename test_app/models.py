@@ -31,7 +31,7 @@ STATUS = (
 
 timeDurationRegex = RegexValidator(regex = r"^\d{1,3}$")
 
-class Sub_Category(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=200, unique=True, verbose_name="Katta kategoriya")
     slug = AutoSlugField(populate_from = 'name', unique=True)
     description = models.CharField(max_length=350, blank=True, null=True, verbose_name="Kategoriya haqida")
@@ -49,10 +49,10 @@ class Sub_Category(models.Model):
         return self.name
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=200, unique=True, verbose_name="Kategoriya")
+class Sub_Category(models.Model):
+    name = models.CharField(max_length=200, unique=True, verbose_name="Kategoriya nomi")
     slug = AutoSlugField(populate_from = 'name', unique=True)
-    parent = models.ForeignKey(Sub_Category, related_name='category', on_delete=models.CASCADE, blank=True, null=True, verbose_name = "Katta kategoriya")
+    parent = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE, blank=True, null=True, verbose_name = "Katta kategoriya")
     description = models.CharField(max_length=350, blank=True, null=True, verbose_name="Kategoriya haqida")
     question_type = models.CharField(max_length=100, choices=TEST_TYPES, default="oddiy", verbose_name="Test turi")
     number_of_questions = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="Savollar soni")
@@ -72,7 +72,7 @@ class Category(models.Model):
 
 
 class Question(models.Model):
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="question", verbose_name="Kategoriya")
+    category_id = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, related_name="question", verbose_name="Kategoriya")
     question = models.CharField(max_length=350, verbose_name="Savol matni")
     slug = AutoSlugField(populate_from ='question', unique=True)
     photo = models.ImageField(upload_to="question_photo/%Y/%m/%d/", verbose_name="Rasm", blank=True, null=True)

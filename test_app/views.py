@@ -10,15 +10,15 @@ from .serializer import Sub_CategoryAPISerializer, CategoryAPISerializer, Questi
 
 # Viewset for API serializers
 
-class Sub_CategoryViewset(viewsets.ModelViewSet):
-    queryset = Sub_Category.objects.filter(status="active")
-    serializer_class = Sub_CategoryAPISerializer
-    lookup_field = 'slug'
-    permission_classes = [AllowAny]
-
 class CategoryViewset(viewsets.ModelViewSet):
     queryset = Category.objects.filter(status="active")
     serializer_class = CategoryAPISerializer
+    lookup_field = 'slug'
+    permission_classes = [AllowAny]
+
+class Sub_CategoryViewset(viewsets.ModelViewSet):
+    queryset = Sub_Category.objects.filter(status="active")
+    serializer_class = Sub_CategoryAPISerializer
     lookup_field = 'slug'
     permission_classes = [AllowAny]
 

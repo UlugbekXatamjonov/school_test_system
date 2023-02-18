@@ -15,16 +15,16 @@ class QuestionAPISerializer(serializers.ModelSerializer):
         model = Question
         fields = ('id','question','slug','photo','answer')
 
-class CategoryAPISerializer(serializers.ModelSerializer):
+class Sub_CategoryAPISerializer(serializers.ModelSerializer):
     question = QuestionAPISerializer(many=True, read_only=True)
     class Meta:
-        model = Category
+        model = Sub_Category
         fields = ('id','name','slug','description','number_of_questions','time_duration','question')
 
-class Sub_CategoryAPISerializer(serializers.ModelSerializer):
-    category = CategoryAPISerializer(many=True, read_only=True)
+class CategoryAPISerializer(serializers.ModelSerializer):
+    category = Sub_CategoryAPISerializer(many=True, read_only=True)
     class Meta:
-        model = Sub_Category
+        model = Category
         fields = ('id','name','slug','description','category')
 
 
