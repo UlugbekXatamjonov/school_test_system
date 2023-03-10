@@ -37,10 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.sites", # new
     # global apps   
+
     'rest_framework',
+    'rest_framework.authtoken',
+
     'drf_yasg', # swagger uchun
     "corsheaders", 
+    'dj_rest_auth',
+
+    'rangefilter', # admin panelda vaqt oralig'i bo'yicha filterlash uchun 
 
     # local apps
     'user_app',
@@ -129,10 +136,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR.joinpath('static')
-]
-STATIC_ROOT = 'staticfiles'
+# STATICFILES_DIRS = [
+#     BASE_DIR.joinpath('static')
+# ]
+# STATIC_ROOT = 'staticfiles'
 
 # Media settings
 MEDIA_URL = '/media/'
@@ -148,15 +155,15 @@ MEDIA_ROOT = 'media'
 # }
 
 # REST FRAMEWORK setting
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+REST_FRAMEWORK = { 
+    'DEFAULT_PERMISSION_CLASSES': [ 
+        'rest_framework.permissions.IsAuthenticated', 
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': [ 
+        'rest_framework.authentication.TokenAuthentication', 
+    ], 
 }
+
 
 # -----  Cors origin settings ------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -167,11 +174,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
     'http://localhost:8080',
     'http://localhost:8001',
-    'http://localhost:800',
-    'http://backend.tibbiypsixologiya.uz',
-    'http://tibbiypsixologiya.uz',
-    'https://dashboardp.vercel.app',
-
+    'http://localhost:800'
 )
 
 CORS_ALLOW_METHODS = [
@@ -187,3 +190,4 @@ CORS_ORIGIN_ALLOW_ALL = True
 # -----  Cors origin settings ------
 
 
+AUTH_USER_MODEL = 'user_app.Student'

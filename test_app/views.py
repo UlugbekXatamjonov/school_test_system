@@ -1,11 +1,10 @@
 from django.shortcuts import render
 
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
-from rest_framework.response import Response 
 from rest_framework import viewsets
 
-from .models import Sub_Category, Category, Question, Answer
-from .serializer import Sub_CategoryAPISerializer, CategoryAPISerializer, QuestionAPISerializer, AnswerAPISerializer
+from .models import Sub_Category, Category, Question, Answer, Result
+from .serializer import Sub_CategoryAPISerializer, CategoryAPISerializer, QuestionAPISerializer, AnswerAPISerializer, ResultSerializer
 
 
 # Viewset for API serializers
@@ -36,6 +35,14 @@ class AnswerViewset(viewsets.ModelViewSet):
 
 
 
+""" ------------------------ CRUD Viewset -------------------- """
+
+class ResultViewset(viewsets.ModelViewSet):
+    queryset = Result.objects.all()
+    serializer_class = ResultSerializer
+    permission_classes = [AllowAny]
+
+    """ Add CRUD operations """
 
 
 

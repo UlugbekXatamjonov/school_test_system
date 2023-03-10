@@ -32,18 +32,20 @@ schema_view = get_schema_view(
         license=openapi.License('Test API litsenziasi'),
         ),
         public=True,
-        permission_classes=(permissions.IsAuthenticated, ),
+        permission_classes=(permissions.AllowAny, ),
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
 
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-radoc'),
     
-
     path('test/', include('test_app.urls')),
+    path('student/', include('user_app.urls')),
 ]
 
 if settings.DEBUG:

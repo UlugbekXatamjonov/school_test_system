@@ -1,4 +1,4 @@
-from .models import Sub_Category, Category, Question, Answer
+from .models import Sub_Category, Category, Question, Answer, Result
 from rest_framework import serializers
 
 
@@ -27,7 +27,25 @@ class CategoryAPISerializer(serializers.ModelSerializer):
         model = Category
         fields = ('id','name','slug','description','category')
 
+class ResultAPISerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source='category.name')
+    subcategory_name = serializers.CharField(source='subcategory.name')
+    
+    class Meta:
+        model = Result
+        fields = ('id', 'category_name', 'subcategory_name', 'ball', 'tashxis', 'created_at', 'created_at')
 
+
+
+""" ----------------------------  CRUID Serialazers ------------------------------------ """
+class ResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Result
+        fields = ('__all__')
+
+
+        
+""" ----------------------------  CRUD Serialazers ------------------------------------ """
 
 
 
