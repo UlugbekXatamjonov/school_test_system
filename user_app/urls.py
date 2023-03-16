@@ -1,14 +1,19 @@
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
+from .views import UserRegistrationView, UserLoginView, UserProfileView, UserChangePasswordView, \
+    SendPasswordResetEmailView, UserPasswordResetView, LogoutAPIView,  UserProfileUpdateView
 
-from .views import StudentViewSet
-
-
-router = routers.DefaultRouter()
-router.register(f'student', StudentViewSet, basename='student')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/', UserLoginView.as_view(), name="login"),
+    path('logout/', LogoutAPIView.as_view(), name="logout"),
+    path('profile/update/<slug:slug>/', UserProfileUpdateView.as_view(), name="profile_update"),
+    path('profile/', UserProfileView.as_view(), name="profile"),
+    path('change-password/', UserChangePasswordView.as_view(), name="change_password"),
+    path('send-reset-password-email/', SendPasswordResetEmailView.as_view(), name="send_reset_password_email"),
+    path('reset-password/<uid>/<token>/', UserPasswordResetView.as_view(), name='reset-password'),
 ]
 
 
