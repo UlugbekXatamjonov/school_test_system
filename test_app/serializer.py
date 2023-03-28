@@ -1,4 +1,6 @@
-from .models import Sub_Category, Category, Question, Answer, Result
+from .models import Sub_Category, Category, Question, Answer
+
+from user_app.models import Result
 from rest_framework import serializers
 
 

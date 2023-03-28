@@ -16,7 +16,16 @@ from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserPr
   UserChangePasswordSerializer, SendPasswordResetEmailSerializer, \
   UserPasswordResetSerializer, LogoutSerializer
 from .renderers import UserRenderer
+from test_app.models import Sub_Category
 
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers, status
+from rest_framework_simplejwt.views import (
+    TokenBlacklistView,
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 
 # Generate Token Manually
@@ -75,7 +84,7 @@ class UserProfileView(RetrieveUpdateDestroyAPIView):
   def get(self, request, format=None):
     serializer = UserProfileSerializer(request.user)
     return Response(serializer.data, status=status.HTTP_200_OK)
-  
+ 
 
 class UserProfileUpdateView(RetrieveUpdateDestroyAPIView):
   queryset = Student.objects.all()
@@ -84,30 +93,63 @@ class UserProfileUpdateView(RetrieveUpdateDestroyAPIView):
   
   renderer_classes = [UserRenderer]
   permission_classes = [IsAuthenticated]
-      
+
   def update(self, request, *args, **kwargs):
     student_data = self.get_object()
     data = request.data
-    
+
     try:
-          if Student.objects.filter(username=data['username']) and student_data.username != data['username']:
+        if Student.objects.filter(username=data['username']) and student_data.username != data['username']:
             return Response({'error': "Bunday 'username' avval yaratilgan ! Iltimos boshqa 'username' tanlang."})
     except:
         pass
 
+    # <--- Foreginkey uchun --->
     try:
-        student_data.password = data['password'] if 'password' in data else student_data.password
-        student_data.username = data['username'] if 'username' in data else student_data.username
-        student_data.first_name = data['first_name'] if 'first_name' in data else student_data.first_name
-        student_data.last_name = data['last_name'] if 'last_name' in data else student_data.last_name
+        try:
+            student_tests = Sub_Category.objects.filter(pk=data['student_tests']).first()
+        except:
+            student_tests = None
+    except Exception as e:
+        return Response({"error":"Bunday  Kategoriya mavjud emas!!!"})
+    # <--- Foreginkey uchun --->
+
+    try:
+        if student_tests:
+            student_data.student_tests = student_tests
+
+            student_data.password = data['password'] if 'password' in data else student_data.password
+            student_data.username = data['username'] if 'username' in data else student_data.username
+            student_data.first_name = data['first_name'] if 'first_name' in data else student_data.first_name
+            student_data.last_name = data['last_name'] if 'last_name' in data else student_data.last_name
+            
+            student_data.age = data['age'] if 'age' in data else student_data.age
+            student_data.gender = data['gender'] if 'gender' in data else student_data.gender
+            student_data.state = data['state'] if 'state' in data else student_data.state
+            student_data.photo = data['photo'] if 'photo' in data else student_data.photo
+            student_data.email = data['email'] if 'email' in data else student_data.email
+            student_data.phone_number = data['phone_number'] if 'phone_number' in data else student_data.phone_number
+            
+            student_data.father_email = data['father_email'] if 'father_email' in data else student_data.father_email
+            student_data.father_number = data['father_number'] if 'father_number' in data else student_data.father_number
+            student_data.father_password = data['father_password'] if 'father_password' in data else student_data.father_password
         
-        student_data.age = data['age'] if 'age' in data else student_data.age
-        student_data.gender = data['gender'] if 'gender' in data else student_data.gender
-        student_data.state = data['state'] if 'state' in data else student_data.state
-        student_data.photo = data['photo'] if 'photo' in data else student_data.photo
-        student_data.email = data['email'] if 'email' in data else student_data.email
-        student_data.phone_number = data['phone_number'] if 'phone_number' in data else student_data.phone_number
-        student_data.father_number = data['father_number'] if 'father_number' in data else student_data.father_number
+        else:
+            student_data.password = data['password'] if 'password' in data else student_data.password
+            student_data.username = data['username'] if 'username' in data else student_data.username
+            student_data.first_name = data['first_name'] if 'first_name' in data else student_data.first_name
+            student_data.last_name = data['last_name'] if 'last_name' in data else student_data.last_name
+            
+            student_data.age = data['age'] if 'age' in data else student_data.age
+            student_data.gender = data['gender'] if 'gender' in data else student_data.gender
+            student_data.state = data['state'] if 'state' in data else student_data.state
+            student_data.photo = data['photo'] if 'photo' in data else student_data.photo
+            student_data.email = data['email'] if 'email' in data else student_data.email
+            student_data.phone_number = data['phone_number'] if 'phone_number' in data else student_data.phone_number
+            
+            student_data.father_email = data['father_email'] if 'father_email' in data else student_data.father_email
+            student_data.father_number = data['father_number'] if 'father_number' in data else student_data.father_number
+            student_data.father_password = data['father_password'] if 'father_password' in data else student_data.father_password
         
         student_data.save()
         serializer = UserProfileSerializer(student_data)
@@ -144,5 +186,94 @@ class UserPasswordResetView(APIView):
 
 
 
+
+
+"""  ------------------------------------------------  """
+
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers, status
+from rest_framework_simplejwt.views import (
+    TokenBlacklistView,
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+
+
+class TokenObtainPairResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+    refresh = serializers.CharField()
+
+    def create(self, validated_data):
+        raise NotImplementedError()
+
+    def update(self, instance, validated_data):
+        raise NotImplementedError()
+
+
+class DecoratedTokenObtainPairView(TokenObtainPairView):
+    @swagger_auto_schema(
+        responses={
+            status.HTTP_200_OK: TokenObtainPairResponseSerializer,
+        }
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+
+class TokenRefreshResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+
+    def create(self, validated_data):
+        raise NotImplementedError()
+
+    def update(self, instance, validated_data):
+        raise NotImplementedError()
+
+
+class DecoratedTokenRefreshView(TokenRefreshView):
+    @swagger_auto_schema(
+        responses={
+            status.HTTP_200_OK: TokenRefreshResponseSerializer,
+        }
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+
+class TokenVerifyResponseSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        raise NotImplementedError()
+
+    def update(self, instance, validated_data):
+        raise NotImplementedError()
+
+
+class DecoratedTokenVerifyView(TokenVerifyView):
+    @swagger_auto_schema(
+        responses={
+            status.HTTP_200_OK: TokenVerifyResponseSerializer,
+        }
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+
+class TokenBlacklistResponseSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        raise NotImplementedError()
+
+    def update(self, instance, validated_data):
+        raise NotImplementedError()
+
+
+class DecoratedTokenBlacklistView(TokenBlacklistView):
+    @swagger_auto_schema(
+        responses={
+            status.HTTP_200_OK: TokenBlacklistResponseSerializer,
+        }
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
 

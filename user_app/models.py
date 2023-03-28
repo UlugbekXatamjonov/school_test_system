@@ -5,6 +5,8 @@ from django.utils.html import mark_safe
 from autoslug import AutoSlugField
 from rest_framework.response import Response
 
+from test_app.models import Sub_Category, Category
+
 # Create your models here.
 
 
@@ -26,8 +28,8 @@ _validate_phone = RegexValidator(
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, first_name, last_name,  email, age, \
-        gender, state, photo, phone_number, father_number, password=None, password2=None):
+    def create_user(self, username, first_name, last_name,  email, age, gender, state, photo, phone_number,\
+                    password=None, password2=None):
 
         if not username:
             raise ValueError("Foydalanuvchida 'username' bo'lishi shart !")
@@ -42,7 +44,6 @@ class UserManager(BaseUserManager):
             state = state,
             photo = photo,
             phone_number = phone_number,
-            father_number = father_number,
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -53,15 +54,14 @@ class UserManager(BaseUserManager):
         user = self.create_user(
             password = password,
             username = username,
-            first_name = 'Admin',
-            last_name= 'last_name',
             email=email,
-            age = 20,
+            first_name = 'Admin',
+            last_name= 'Admin',
+            age = 1,
             gender = 'man',
-            state = 3,
+            state = 1,
             photo = 'C:/Users/xatam/OneDrive/Pictures/Saved_Pictures/default_person_picture(2).png',
-            phone_number = '+998663216547',
-            father_number = '+998663216547',
+            phone_number = '+998111111111',
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -75,10 +75,14 @@ class Student(AbstractUser):
     state = models.PositiveIntegerField(default=1, verbose_name="sinf")
     photo  = models.ImageField(upload_to="user_photo", verbose_name="rasm", blank=True, null=True,\
             default='C:/Users/xatam/OneDrive/Pictures/Saved_Pictures/default_person_picture(2).png')
-    email = models.EmailField(null=True, blank=True, verbose_name="email")
+    email = models.EmailField(null=True, blank=True, verbose_name="email") # delete 'blank' and 'null'
     phone_number = models.CharField(max_length=20, null=True, blank=True, validators=[_validate_phone], verbose_name="shaxsiy raqam") # ADD unique=True, ///  front 13 ta belgiga cheklov qo'yib qo'ysin !!!
-    father_number = models.CharField(max_length=20, null=True, blank=True, validators=[_validate_phone], verbose_name="ota-ona raqami") # ADD unique=True, ///  front 13 ta belgiga cheklov qo'yib qo'ysin !!!
     status = models.CharField(max_length=30, choices=STATUS, default='active', verbose_name='holati')
+    student_tests = models.ForeignKey(Sub_Category, on_delete=models.CASCADE ,related_name="student_tests", blank=True, null=True)
+    
+    father_email = models.EmailField(blank=True, null=True, verbose_name='email') # delete 'blank' and 'null'
+    father_number = models.CharField(max_length=20, null=True, blank=True, validators=[_validate_phone], verbose_name="ota-ona raqami") # ADD unique=True, ///  front 13 ta belgiga cheklov qo'yib qo'ysin !!!
+    father_password = models.CharField(max_length=30, null=True, blank=True, verbose_name="ota-ona paroli")
     
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -92,7 +96,7 @@ class Student(AbstractUser):
         verbose_name = "O'quvchi"
         verbose_name_plural = "O'quvchilar"
         ordering = ("-created_at",)
-        
+            
     def __str__(self):
         text = f"{self.first_name}"
         return text
@@ -121,7 +125,21 @@ class Student(AbstractUser):
 
 
 
+class Result(models.Model):
+    user = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="test_results", verbose_name="O'quvchi")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="result_category", verbose_name="categoriya")
+    subcategory = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, related_name="result_subcategory", verbose_name="kichik kategoriya")
+    ball = models.PositiveIntegerField(default=0, verbose_name="ball")
+    tashxis = models.CharField(max_length=255, blank=True, null=True, verbose_name="tashxis")
+    created_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "Test natijasi"
+        verbose_name_plural = "Test natijalari"
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 
 

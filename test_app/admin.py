@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Sub_Category, Category, Question, Answer, Result
+from .models import Sub_Category, Category, Question, Answer
+from user_app.models import Result
 
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 # from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter, NumericRangeFilter

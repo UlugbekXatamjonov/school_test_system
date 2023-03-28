@@ -3,9 +3,10 @@ from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework import viewsets
 
-from .models import Sub_Category, Category, Question, Answer, Result
+from .models import Sub_Category, Category, Question, Answer
 from .serializer import Sub_CategoryAPISerializer, CategoryAPISerializer, QuestionAPISerializer, AnswerAPISerializer, ResultSerializer
 
+from user_app.models import Result
 
 # Viewset for API serializers
 

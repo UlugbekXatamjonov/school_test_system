@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from .models import Student
 from .utils import Util
 
-from test_app.models import Result
+from .models import Result
 from test_app.serializer import ResultAPISerializer
 
 
@@ -29,7 +29,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "photo",
             "email",
             "phone_number",
+
             "father_number",
+            "father_password",
+            "father_email",
         )
     extra_kwargs={
       'password':{'write_only':True}
@@ -83,7 +86,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "slug",
-            "password",
+            # "password",
             "first_name",
             "last_name",
             "age",
@@ -92,10 +95,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "photo",
             "email",
             "phone_number",
-            "father_number",
+            'student_tests',
             'test_results',  
-            "created_at",
+            # "created_at",
             # "last_login",
+
+            "father_number",
+            "father_password",
+            "father_email",
+            
         )
 
 
@@ -174,6 +182,5 @@ class UserPasswordResetSerializer(serializers.Serializer):
             PasswordResetTokenGenerator().check_token(user, token)
             raise serializers.ValidationError('Token is not Valid or Expired')
   
-
 
 

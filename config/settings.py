@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'rangefilter', # admin panelda vaqt oralig'i bo'yicha filterlash uchun 
 
     # local apps
-    'user_app',
     'test_app',
+    'user_app',
 
 ]
 
@@ -142,8 +142,8 @@ STATIC_URL = '/static/'
 # STATIC_ROOT = 'staticfiles'
 
 # Media settings
-MEDIA_URL = '/media/'
-MEDIA_ROOT = 'media' 
+MEDIA_URL = 'media/'
+MEDIA_ROOT = '/media/' 
 
 
 # REST_FRAMEWORK = {
@@ -166,8 +166,8 @@ REST_FRAMEWORK = {
 
 # JWT Settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),            
 
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',

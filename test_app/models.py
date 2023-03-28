@@ -2,7 +2,7 @@ from django.db import models
 from autoslug import AutoSlugField
 from django.core.validators import RegexValidator
 
-from user_app.models import Student
+# from user_app.models import Student
 
 # Create your models here.
 
@@ -115,21 +115,21 @@ class Answer(models.Model):
         return self.answer
 
 
-class Result(models.Model):
-    user = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="test_results", verbose_name="O'quvchi")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="result_category", verbose_name="categoriya")
-    subcategory = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, related_name="result_subcategory", verbose_name="kichik kategoriya")
-    ball = models.PositiveIntegerField(default=0, verbose_name="ball")
-    tashxis = models.CharField(max_length=255, blank=True, null=True, verbose_name="tashxis")
-    created_at = models.DateTimeField(auto_now=True)
+# class Result(models.Model):
+#     user = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="test_results", verbose_name="O'quvchi")
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="result_category", verbose_name="categoriya")
+#     subcategory = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, related_name="result_subcategory", verbose_name="kichik kategoriya")
+#     ball = models.PositiveIntegerField(default=0, verbose_name="ball")
+#     tashxis = models.CharField(max_length=255, blank=True, null=True, verbose_name="tashxis")
+#     created_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        verbose_name = "Test natijasi"
-        verbose_name_plural = "Test natijalari"
-        ordering = ('-created_at',)
+#     class Meta:
+#         verbose_name = "Test natijasi"
+#         verbose_name_plural = "Test natijalari"
+#         ordering = ('-created_at',)
 
-    def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}"
+#     def __str__(self):
+#         return f"{self.user.first_name} {self.user.last_name}"
     
 
 
