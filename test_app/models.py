@@ -2,8 +2,6 @@ from django.db import models
 from autoslug import AutoSlugField
 from django.core.validators import RegexValidator
 
-# from user_app.models import Student
-
 # Create your models here.
 
 TEST_TYPES = (
@@ -76,7 +74,7 @@ class Question(models.Model):
     question = models.CharField(max_length=350, verbose_name="Savol matni")
     slug = AutoSlugField(populate_from ='question', unique=True)
     photo = models.ImageField(upload_to="question_photo/%Y/%m/%d/", verbose_name="Rasm", blank=True, null=True)
-    job_type = models.CharField(max_length=100, choices=JOB_TYPES, default='no', verbose_name="Kasb turi")
+    job_type = models.CharField(max_length=100, choices=JOB_TYPES, default='no', verbose_name="Kasb turi", blank=True, null=True)
 
     status = models.CharField(max_length=100, choices=STATUS, default='active', verbose_name="Holati")
     created_at = models.DateTimeField(auto_now=True)
@@ -113,28 +111,6 @@ class Answer(models.Model):
     def __str__(self):
         # return f"{self.category_id.name} - {self.question}"
         return self.answer
-
-
-# class Result(models.Model):
-#     user = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="test_results", verbose_name="O'quvchi")
-#     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="result_category", verbose_name="categoriya")
-#     subcategory = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, related_name="result_subcategory", verbose_name="kichik kategoriya")
-#     ball = models.PositiveIntegerField(default=0, verbose_name="ball")
-#     tashxis = models.CharField(max_length=255, blank=True, null=True, verbose_name="tashxis")
-#     created_at = models.DateTimeField(auto_now=True)
-
-#     class Meta:
-#         verbose_name = "Test natijasi"
-#         verbose_name_plural = "Test natijalari"
-#         ordering = ('-created_at',)
-
-#     def __str__(self):
-#         return f"{self.user.first_name} {self.user.last_name}"
-    
-
-
-
-
 
 
 

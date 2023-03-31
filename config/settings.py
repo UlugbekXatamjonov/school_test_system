@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     # global apps   
     'rest_framework',
     'rest_framework_simplejwt',
-     'rest_framework_simplejwt.token_blacklist',
+    'rest_framework_simplejwt.token_blacklist',
+
     'drf_yasg', # swagger uchun
     "corsheaders",   
     'rangefilter', # admin panelda vaqt oralig'i bo'yicha filterlash uchun 
@@ -211,3 +212,28 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 
 AUTH_USER_MODEL = 'user_app.Student'
+
+""" SMTP settings """
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "xatamjonovulugbek17@gmail.com"
+EMAIL_HOST_PASSWORD = "undupdquyhkwnkjj"
+
+
+SWAGGER_SETTINGS = {
+    "USE_SESSION_AUTH": False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'DEFAULT_AUTHENTICATION': 'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
+
+
+

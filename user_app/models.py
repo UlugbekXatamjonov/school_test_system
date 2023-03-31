@@ -131,6 +131,7 @@ class Result(models.Model):
     subcategory = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, related_name="result_subcategory", verbose_name="kichik kategoriya")
     ball = models.PositiveIntegerField(default=0, verbose_name="ball")
     tashxis = models.CharField(max_length=255, blank=True, null=True, verbose_name="tashxis")
+    test_api = models.JSONField(default={}, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True)
 
     class Meta:

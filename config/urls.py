@@ -18,23 +18,34 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
 from rest_framework_simplejwt.views import TokenBlacklistView
+ 
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+from drf_yasg import openapi
+
+
+from rest_framework import routers
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
+
 
 schema_view = get_schema_view(
-    openapi.Info(
-        title='School test system websayti',
-        description='Maktablar uchun test tizimi', 
-        default_version='v1',
-        terms_of_service='https://google.com.policies.terms',
-        contact=openapi.Contact(email="xatamjonovulugbek17@gmail.com"),
-        license=openapi.License('Test API litsenziasi'),
-        ),
-        public=True,
-        permission_classes=(permissions.AllowAny, ),
+   openapi.Info(
+      title="School test system API's",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
 )
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,9 +57,17 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-radoc'),
     
+    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+
+    path('swagger<str:format>', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
     path('test/', include('test_app.urls')),
     path('student/', include('user_app.urls')),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
