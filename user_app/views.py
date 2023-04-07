@@ -26,7 +26,6 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-
 # Generate Token Manually
 def get_tokens_for_user(user):
   refresh = RefreshToken.for_user(user)
@@ -182,8 +181,6 @@ class UserPasswordResetView(APIView):
     serializer = UserPasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
     serializer.is_valid(raise_exception=True)
     return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
-
-
 
 
 

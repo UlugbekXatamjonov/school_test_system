@@ -5,17 +5,20 @@ from django.core.validators import RegexValidator
 # Create your models here.
 
 TEST_TYPES = (
-    ('oddiy','Oddiy test'), # ballar yig'indisi bo'yicha hisoblash uchun 
-    ('ota',"O'quvchi tepmeramentini aniqlash"), # 1 ta savol bor. Savolda 4 ta rasm bor tanlangan rasmga mos javob chiqadi
-    ('ktta',"KASB TANLASHGA TAYYORLIKNI ANIQLASH"), # Variantlar Ha/Yo'q dan iborat 'Ha' lar yig'ilib hisoblanadi
-    ("ehsa","Emotsional holati va stressni aniqlash"), # Savol ostidagi ballar yig'iladi
-    ('kta',"Kasb tiplarini aniqlash"), # Variantlar Ha/Yo'q dan iborat 'Ha' lar yig'ilib hisoblanadi
+    # 1 ta savol bor. Savolda 4 ta rasm bor tanlangan rasmga mos javob chiqadi 👇👇👇
+    ('ota',"O'quvchi tepmeramentini aniqlash"), 
+    # Variantlar Ha/Yo'q dan iborat 'Ha' lar yig'ilib hisoblanadi 👇👇👇
+    ('ktta',"Kasb tanlashga tayorgarlikni aniqlash"), 
+    # Savol ostidagi ballar yig'iladi 👇👇👇
+    ("ehsa","Emotsional holati va stressni aniqlash"), 
+    # Variantlar Ha/Yo'q dan iborat 'Ha' lar yig'ilib hisoblanadi 👇👇👇
+    ('kta',"Kasb tiplarini aniqlash"), 
 )
 
 JOB_TYPES = (
-    ('no',"Yo'q"),
+    ('no',"No'malum"),
     ('tabiat', "Tabiat"),
-    ('texnika', "texnika"),
+    ('texnika', "Texnika"),
     ('belgi','Belgi'),
     ('sanat',"San'at"),
     ('inson', "Inson"),
@@ -50,7 +53,7 @@ class Category(models.Model):
 class Sub_Category(models.Model):
     name = models.CharField(max_length=200, unique=True, verbose_name="Kategoriya nomi")
     slug = AutoSlugField(populate_from = 'name', unique=True)
-    parent = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE, blank=True, null=True, verbose_name = "Katta kategoriya")
+    parent = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE, verbose_name = "Katta kategoriya")
     description = models.CharField(max_length=350, blank=True, null=True, verbose_name="Kategoriya haqida")
     question_type = models.CharField(max_length=100, choices=TEST_TYPES, default="oddiy", verbose_name="Test turi")
     number_of_questions = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="Savollar soni")
@@ -62,8 +65,8 @@ class Sub_Category(models.Model):
 
     class Meta:
         ordering = ('-created_at','status')
-        verbose_name = "Kategoriya"
-        verbose_name_plural = "Kategoriyalar"
+        verbose_name = "kichik kategoriya"
+        verbose_name_plural = "kichik kategoriyalar"
 
     def __str__(self):
         return self.name
@@ -86,7 +89,6 @@ class Question(models.Model):
         verbose_name_plural = "Savollar"
 
     def __str__(self):
-        # return f"{self.category_id.name} - {self.question}"
         return self.question
 
 
@@ -96,7 +98,7 @@ class Answer(models.Model):
     slug = AutoSlugField(populate_from ='answer', unique=True)
     ball = models.PositiveIntegerField(default=0, verbose_name="Variant ostidagi Ball", blank=True, null=True)
     true_answer = models.BooleanField(default=False, verbose_name="To'g'ri javob", blank=True, null=True)
-    question_result = models.CharField(max_length=350, blank=True, null=True, verbose_name="Savol natijasi")
+    question_result = models.TextField(blank=True, null=True, verbose_name="Javob natijasi")
     photo = models.ImageField(upload_to="answer_photo/%Y/%m/%d/", blank=True, null=True)
 
     status = models.CharField(max_length=100, choices=STATUS, default='active', verbose_name="Holati")
@@ -109,8 +111,9 @@ class Answer(models.Model):
         verbose_name_plural = "Javoblar"
 
     def __str__(self):
-        # return f"{self.category_id.name} - {self.question}"
         return self.answer
+
+
 
 
 

@@ -7,9 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from .models import Student
 from .utils import Util
 
-from .models import Result
 from test_app.serializer import ResultAPISerializer
-
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -26,7 +24,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "age",
             "gender",
             "state",
-            "photo",
+            # "photo",
             "email",
             "phone_number",
 
@@ -145,7 +143,7 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
             print('Password Reset Link', link)
             print("-------------------------------------------------------------------------------")
             # Send EMail
-            body = 'Click Following Link to Reset Your Password '+link
+            body = 'Parolingizni tiklash uchun quyidagi havolani bosing '+link
             data = {
                 'subject':'Reset Your Password',
                 'body':body,

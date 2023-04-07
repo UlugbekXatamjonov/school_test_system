@@ -137,23 +137,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     BASE_DIR.joinpath('static')
-# ]
-# STATIC_ROOT = 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR.joinpath('static')
+]
+STATIC_ROOT = 'staticfiles'
 
 # Media settings
 MEDIA_URL = 'media/'
 MEDIA_ROOT = '/media/' 
-
-
-# REST_FRAMEWORK = {
-#     # Use Django's standard `django.contrib.auth` permissions,
-#     # or allow read-only access for unauthenticated users.
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.AllowAny'
-#     ]
-# }
 
 # REST FRAMEWORK setting
 REST_FRAMEWORK = { 
@@ -167,7 +158,7 @@ REST_FRAMEWORK = {
 
 # JWT Settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=100),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),            
 
     'AUTH_HEADER_TYPES': ('Bearer',),
