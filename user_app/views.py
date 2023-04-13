@@ -82,7 +82,7 @@ class UserProfileView(RetrieveUpdateDestroyAPIView):
   def get(self, request, format=None):
     serializer = UserProfileSerializer(request.user)
     return Response(serializer.data, status=status.HTTP_200_OK)
- 
+
 
 class UserProfileUpdateView(RetrieveUpdateDestroyAPIView):
   queryset = Student.objects.all()

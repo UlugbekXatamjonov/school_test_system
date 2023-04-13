@@ -26,7 +26,7 @@ _validate_phone = RegexValidator(
     regex = r"^[\+]?[9]{2}[8]?[0-9]{2}?[0-9]{3}?[0-9]{2}?[0-9]{2}$",
     message = "Telefon raqamingiz 9 bilan boshlanishi va 12 belgidan oshmasligi lozim. Masalan: 998334568978",
 )
-
+    
 class UserManager(BaseUserManager):
     def create_user(self, username, first_name, last_name,  email, age, gender, state, phone_number,\
                     password=None, password2=None):
@@ -72,7 +72,7 @@ class Student(AbstractUser):
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES, default='man', verbose_name="jins") # DELETE -> default
     state = models.PositiveIntegerField(default=1, verbose_name="sinf")
     photo  = models.ImageField(upload_to="user_photo", verbose_name="rasm", blank=True, null=True,\
-            default='C:/Users/xatam/OneDrive/Pictures/Saved_Pictures/default_person_picture(2).png')
+            default='default_person_picture.png')
     email = models.EmailField(null=True, blank=True, verbose_name="email") # delete 'blank' and 'null'
     phone_number = models.CharField(max_length=20, null=True, blank=True, validators=[_validate_phone], verbose_name="shaxsiy raqam") # ADD unique=True, ///  front 13 ta belgiga cheklov qo'yib qo'ysin !!!
     status = models.CharField(max_length=30, choices=STATUS, default='active', verbose_name='holati')

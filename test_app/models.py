@@ -31,7 +31,7 @@ STATUS = (
 )
 
 timeDurationRegex = RegexValidator(regex = r"^\d{1,3}$")
-
+        
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True, verbose_name="Katta kategoriya")
     slug = AutoSlugField(populate_from = 'name', unique=True)
