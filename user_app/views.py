@@ -44,21 +44,60 @@ class UserRegistrationView(APIView):
     return Response({'token':token, 'message':"Ro'yhatdan muvaffaqiyatli o'tdingiz"}, status=status.HTTP_201_CREATED)
 
 
+# class UserLoginView(APIView): #🔴 eski lognview / token + profil data / dan oldingi
+#   renderer_classes = [UserRenderer]
+
+#   def post(self, request, format=None):
+#     serializer = UserLoginSerializer(data=request.data)
+#     serializer.is_valid(raise_exception=True)
+#     username = serializer.data.get('username')
+#     password = serializer.data.get('password')
+#     user = authenticate(username=username, password=password)
+#     serializer = UserProfileSerializer(request.user)
+    
+
+#     if user is not None:
+#       token = get_tokens_for_user(user)
+#       return Response(
+#           {
+#             'data':serializer.data,
+#             'token':token, 
+#             'message':'Tizimga muvaffaqiyatli kirdingiz',
+#           }, 
+#           status=status.HTTP_200_OK)
+#     else:
+#       return Response({'errors':{'non_field_errors':["Kiritilgan 'parol' yoki 'username' noto'g'ri"]}}, status=status.HTTP_404_NOT_FOUND)
+
+
 class UserLoginView(APIView):
-  renderer_classes = [UserRenderer]
+    renderer_classes = [UserRenderer]
+    
+    def post(self, request, format=None):
+        serializer = UserLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        username = serializer.data.get('username')
+        password = serializer.data.get('password')
+        user = authenticate(username=username, password=password)
+        
+        if user is not None:
+            # token, created = Token.objects.get_or_create(user=user)
+            token = get_tokens_for_user(user)
+            serializer = UserProfileSerializer(user)
 
-  def post(self, request, format=None):
-    serializer = UserLoginSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    username = serializer.data.get('username')
-    password = serializer.data.get('password')
-    user = authenticate(username=username, password=password)
+            return Response({
+                'token': token,
+                'user_profile_data': serializer.data,
+                'message': 'Tizimga muvaffaqiyatli kirdingiz',
+            }, status=status.HTTP_200_OK)
+        
+        else:
+            return Response({
+                'errors': {
+                    'non_field_errors': ["Kiritilgan 'parol' yoki 'username' noto'g'ri"]
+                }
+            }, status=status.HTTP_404_NOT_FOUND)
 
-    if user is not None:
-      token = get_tokens_for_user(user)
-      return Response({'token':token, 'message':'Tizimga muvaffaqiyatli kirdingiz'}, status=status.HTTP_200_OK)
-    else:
-      return Response({'errors':{'non_field_errors':["Kiritilgan 'parol' yoki 'username' noto'g'ri"]}}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 class LogoutAPIView(generics.GenericAPIView):

@@ -143,8 +143,8 @@ STATICFILES_DIRS = [
 STATIC_ROOT = 'staticfiles'
 
 # Media settings
-MEDIA_URL = 'media/'
-MEDIA_ROOT = '/media/' 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media' 
 
 # REST FRAMEWORK setting
 REST_FRAMEWORK = { 
