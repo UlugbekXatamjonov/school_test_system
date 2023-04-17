@@ -69,17 +69,17 @@ class UserManager(BaseUserManager):
 class Student(AbstractUser):    
     slug  = AutoSlugField(populate_from='first_name', unique=True)
     age = models.PositiveIntegerField(default=5, verbose_name="yosh")
-    gender = models.CharField(max_length=50, choices=GENDER_CHOICES, default='man', verbose_name="jins") # DELETE -> default
+    gender = models.CharField(max_length=50, choices=GENDER_CHOICES, verbose_name="jins") 
     state = models.PositiveIntegerField(default=1, verbose_name="sinf")
     photo  = models.ImageField(upload_to="user_photo", verbose_name="rasm", blank=True, null=True,\
             default='default_person_picture.png')
-    email = models.EmailField(null=True, blank=True, verbose_name="email") # delete 'blank' and 'null'
-    phone_number = models.CharField(max_length=20, null=True, blank=True, validators=[_validate_phone], verbose_name="shaxsiy raqam") # ADD unique=True, ///  front 13 ta belgiga cheklov qo'yib qo'ysin !!!
+    email = models.EmailField(unique=True, verbose_name="email")
+    phone_number = models.CharField(max_length=20, null=True, blank=True, unique=True, validators=[_validate_phone], verbose_name="shaxsiy raqam")
     status = models.CharField(max_length=30, choices=STATUS, default='active', verbose_name='holati')
     student_tests = models.ForeignKey(Sub_Category, on_delete=models.CASCADE ,related_name="student_tests", blank=True, null=True)
     
-    father_email = models.EmailField(blank=True, null=True, verbose_name='email') # delete 'blank' and 'null'
-    father_number = models.CharField(max_length=20, null=True, blank=True, validators=[_validate_phone], verbose_name="ota-ona raqami") # ADD unique=True, ///  front 13 ta belgiga cheklov qo'yib qo'ysin !!!
+    father_email = models.EmailField(unique=True, verbose_name='email')
+    father_number = models.CharField(max_length=20, null=True, blank=True, unique=True, validators=[_validate_phone], verbose_name="ota-ona raqami") 
     father_password = models.CharField(max_length=30, null=True, blank=True, verbose_name="ota-ona paroli")
     
     is_active = models.BooleanField(default=True)

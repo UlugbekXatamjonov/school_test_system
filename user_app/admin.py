@@ -6,7 +6,7 @@ from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'id', 'username', 'avatar_tag', 'age', 'gender','state',\
+    list_display = ('first_name', 'last_name', 'id', 'email', 'username', 'avatar_tag', 'age', 'gender','state',\
                     'phone_number','father_number','status','created_at')
     list_filter = ('age','gender','state','status','created_at')
     search_fields = ('first_name','last_name','username','phone_number','father_number')
