@@ -74,7 +74,7 @@ class Student(AbstractUser):
     photo  = models.ImageField(upload_to="user_photo", verbose_name="rasm", blank=True, null=True,\
             default='default_person_picture.png')
     email = models.EmailField(unique=True, verbose_name="email")
-    phone_number = models.CharField(max_length=20, null=True, blank=True, unique=True, validators=[_validate_phone], verbose_name="shaxsiy raqam")
+    phone_number = models.CharField(max_length=20, null=True, blank=True,  validators=[_validate_phone], verbose_name="shaxsiy raqam")
     status = models.CharField(max_length=30, choices=STATUS, default='active', verbose_name='holati')
     student_tests = models.ForeignKey(Sub_Category, on_delete=models.CASCADE ,related_name="student_tests", blank=True, null=True)
     
