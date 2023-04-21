@@ -137,7 +137,7 @@ class UserProfileUpdateView(RetrieveUpdateDestroyAPIView):
 
     try:
         if Student.objects.filter(username=data['username']) and student_data.username != data['username']:
-            return Response({'error': "Bunday 'username' avval yaratilgan ! Iltimos boshqa 'username' tanlang."})
+            return Response({'error': "Bunday 'username' avval yaratilgan ! Iltimos boshqa 'username' tanlang."}, status=status.HTTP_204_NO_CONTENT)
     except:
         pass
 
@@ -148,7 +148,7 @@ class UserProfileUpdateView(RetrieveUpdateDestroyAPIView):
         except:
             student_tests = None
     except Exception as e:
-        return Response({"error":"Bunday  Kategoriya mavjud emas!!!"})
+        return Response({"error": "Bunday  Kategoriya mavjud emas!!!"}, status=status.HTTP_204_NO_CONTENT)
     # <--- Foreginkey uchun --->
 
     try:
@@ -192,7 +192,7 @@ class UserProfileUpdateView(RetrieveUpdateDestroyAPIView):
         serializer = UserProfileSerializer(student_data)
         return Response(serializer.data)
     except Exception as e:
-        return Response({'errors':"Ma'lumotlarni saqlashda xatolik sodir bo'ladi!!!"})
+        return Response({'errors': "Ma'lumotlarni saqlashda xatolik sodir bo'ladi!!!"}, status=status.HTTP_204_NO_CONTENT)
 
 
 class UserChangePasswordView(APIView):

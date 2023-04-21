@@ -83,7 +83,8 @@ class Student(AbstractUser):
     student_tests = models.ForeignKey(
         Sub_Category, on_delete=models.CASCADE, related_name="student_tests", blank=True, null=True)
 
-    father_email = models.EmailField(verbose_name='email')
+    father_email = models.EmailField(
+        verbose_name='email', blank=True, null=True)
     father_number = models.CharField(max_length=20, null=True, blank=True, validators=[
                                      _validate_phone], verbose_name="ota-ona raqami")
     father_password = models.CharField(
