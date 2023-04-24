@@ -29,7 +29,7 @@ _validate_phone = RegexValidator(
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, first_name, last_name,  email, age, gender, state, phone_number,
+    def create_user(self, username, first_name, last_name,  email, age, gender, state, phone_number, father_email,
                     password=None, password2=None):
 
         if not username:
@@ -44,6 +44,7 @@ class UserManager(BaseUserManager):
             gender=gender,
             state=state,
             phone_number=phone_number,
+            father_email=father_email
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -61,6 +62,7 @@ class UserManager(BaseUserManager):
             gender='man',
             state=1,
             phone_number='+998111111111',
+            father_email='fatheremail@gmail.com'
         )
         user.is_admin = True
         user.save(using=self._db)
