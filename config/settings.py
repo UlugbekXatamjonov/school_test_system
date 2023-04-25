@@ -29,7 +29,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ["*"]       
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,15 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "django.contrib.sites", # new
-    # global apps   
+    "django.contrib.sites",  # new
+    # global apps
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
 
-    'drf_yasg', # swagger uchun
-    "corsheaders",   
-    'rangefilter', # admin panelda vaqt oralig'i bo'yicha filterlash uchun 
+    'drf_yasg',  # swagger uchun
+    "corsheaders",
+    'rangefilter',  # admin panelda vaqt oralig'i bo'yicha filterlash uchun
 
     # local apps
     'test_app',
@@ -148,22 +148,23 @@ STATIC_ROOT = 'staticfiles'
 
 # Media settings
 MEDIA_URL = '/media/'
-MEDIA_ROOT = 'media' 
+# 'school_test_system' appname in project / bu faqat serverda ko'rini uchun shunday qilindi
+MEDIA_ROOT = 'school_test_system/media'
 
 # REST FRAMEWORK setting
-REST_FRAMEWORK = { 
-    # 'DEFAULT_PERMISSION_CLASSES': [ 
-    #     'rest_framework.permissions.IsAuthenticated', 
+REST_FRAMEWORK = {
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
     # ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ], 
+    ],
 }
 
 # JWT Settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=100),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),            
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
@@ -178,7 +179,6 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
 }
-
 
 
 # -----  Cors origin settings ------
@@ -219,7 +219,7 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
     'SECURITY_DEFINITIONS': {
-        'Bearer': { 
+        'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header'
@@ -228,6 +228,3 @@ SWAGGER_SETTINGS = {
     'DEFAULT_AUTHENTICATION': 'rest_framework_simplejwt.authentication.JWTAuthentication',
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
-
-
-
