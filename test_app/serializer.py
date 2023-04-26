@@ -5,6 +5,18 @@ from rest_framework import serializers
 
 """ Serializers for API """
 
+class SelectSub_CategoryAPISerializer(serializers.ModelSerializer):
+    category_slug = serializers.CharField(source='parent.slug')
+    class Meta:
+        model = Sub_Category
+        fields = ('__all__')
+
+class SelectCategoryAPISerializer(serializers.ModelSerializer):
+    category = SelectSub_CategoryAPISerializer(many=True, read_only=True)
+    class Meta:
+        model = Category
+        fields = ('id','name','slug','description','category')
+
 class AnswerAPISerializer(serializers.ModelSerializer):
     question_slug = serializers.CharField(source='question_id.slug')
     class Meta:

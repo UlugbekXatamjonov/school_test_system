@@ -7,14 +7,43 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 from .models import Sub_Category, Category, Question, Answer
-from .serializer import Sub_CategoryAPISerializer, CategoryAPISerializer, QuestionAPISerializer, AnswerAPISerializer, ResultSerializer
+from .serializer import Sub_CategoryAPISerializer, CategoryAPISerializer, QuestionAPISerializer, AnswerAPISerializer, ResultSerializer, \
+    SelectSub_CategoryAPISerializer, SelectCategoryAPISerializer
 
 from user_app.models import Result, Student
 
 # Viewset for API serializers
 
 
+class SelectCategoryViewset(viewsets.ModelViewSet):
+    """
+    ota-ona farzandi uchun category tanlab berishi uchun hamma kategorilar
+    """
+    queryset = Category.objects.filter(status="active")
+    serializer_class = SelectCategoryAPISerializer
+    lookup_field = 'slug'
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Category.objects.filter(status='active')
+
+
+class SelectSub_CategoryViewset(viewsets.ModelViewSet):
+    """
+    ata-ona farzandi uchun subcategory tanlab berishi uchun hamma subcategorilar
+    """
+    queryset = Sub_Category.objects.filter(status="active")
+    serializer_class = SelectSub_CategoryAPISerializer
+    lookup_field = 'slug'
+    permission_classes = [IsAuthenticated]
+
+    
+
+
 class CategoryViewset(viewsets.ModelViewSet):
+    """
+    Ota-ona tanlaganda bolaga ko'rinadigan categorilar
+    """
     queryset = Category.objects.filter(status="active")
     serializer_class = CategoryAPISerializer
     lookup_field = 'slug'
@@ -33,6 +62,9 @@ class CategoryViewset(viewsets.ModelViewSet):
 
 
 class Sub_CategoryViewset(viewsets.ModelViewSet):
+    """
+    Ota-ona tanlaganda bolaga ko'rinadigan subcategorilar
+    """
     queryset = Sub_Category.objects.filter(status="active")
     serializer_class = Sub_CategoryAPISerializer
     lookup_field = 'slug'
@@ -41,9 +73,9 @@ class Sub_CategoryViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         if user.is_authenticated:
-            print('*********************************')
-            print(user.student_tests.id)
-            print('*********************************')
+            # print('*********************************')
+            # print(user.student_tests.id)
+            # print('*********************************')
 
             return Sub_Category.objects.filter(id=user.student_tests.id)
         return Sub_Category.objects.none()

@@ -1,10 +1,15 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .views import Sub_CategoryViewset, CategoryViewset, QuestionViewset, AnswerViewset, ResultViewset
+from .views import Sub_CategoryViewset, CategoryViewset, QuestionViewset, AnswerViewset, ResultViewset, \
+    SelectCategoryViewset, SelectSub_CategoryViewset
 
 router = routers.DefaultRouter()
 
+router.register(r'select-subcategory', SelectSub_CategoryViewset,
+                basename='select-subcategory')
+router.register(r'select-category', SelectCategoryViewset,
+                basename='select-category')
 router.register(r'subcategory', Sub_CategoryViewset, basename='subcategory')
 router.register(r'category', CategoryViewset, basename='category')
 router.register(r'question', QuestionViewset, basename='question')
@@ -14,6 +19,3 @@ router.register(r'result', ResultViewset, basename='result')
 urlpatterns = [
     path('', include(router.urls)),
 ]
-
-
-
