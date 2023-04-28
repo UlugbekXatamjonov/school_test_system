@@ -15,7 +15,7 @@ from user_app.models import Result, Student
 # Viewset for API serializers
 
 
-class SelectCategoryViewset(viewsets.ModelViewSet):     
+class SelectCategoryViewset(viewsets.ModelViewSet):
     """
     ota-ona farzandi uchun category tanlab berishi uchun hamma kategorilar
     """
@@ -36,8 +36,6 @@ class SelectSub_CategoryViewset(viewsets.ModelViewSet):
     serializer_class = SelectSub_CategoryAPISerializer
     lookup_field = 'slug'
     permission_classes = [IsAuthenticated]
-
-    
 
 
 class CategoryViewset(viewsets.ModelViewSet):
@@ -143,7 +141,7 @@ class ResultViewset(viewsets.ModelViewSet):
                 request_test_ids.append(test['test_id'])
                 request_answer_ids.append(test['answer_id'])
         except:
-            return Response({'error': "101 - xatolik turi aniqlandi(ResultViewset)"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'error': "101 - xatolik turi aniqlandi(ResultViewset)"})
 
         """ Requestdan kelgan malumotlar asosida bazadagi mos malumotlarni ajratib olamiz """
         try:
@@ -168,7 +166,7 @@ class ResultViewset(viewsets.ModelViewSet):
                 # bazadan ajratib olingan 'a' list bo'lgani uchun 0-'index'dagi qiymat olinyapdi
                 data_answers.append(a[0])
         except:
-            return Response({'error': "102 - xatolik turi aniqlandi(ResultViewset)"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'error': "102 - xatolik turi aniqlandi(ResultViewset)"})
 
         """ Bazadan tanlab olingan 'test'lar asosida ularning 'ballar'ini kerakli parametrlarga asoslanib
                 ajratib olinadi va 'ball'ga mos bo'lgan 'hulosa' aniqlanadi 
@@ -268,7 +266,7 @@ class ResultViewset(viewsets.ModelViewSet):
                     if key in job_keys:
                         total_hulosa += f"{value}\n\n"
         except:
-            return Response({'error': "103 - xatolik turi aniqlandi(ResultViewset)"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'error': "103 - xatolik turi aniqlandi(ResultViewset)"})
 
         """
         ----------------------------- CALCULATE BALL'S AND RETURN RESULT  ---------------------
@@ -281,10 +279,10 @@ class ResultViewset(viewsets.ModelViewSet):
                 if int(result_data['user']) == int(request.user.id):
                     user = Student.objects.get(pk=str(result_data['user']))
                 else:
-                    return Response({"error": "Ro'yhatdan o'tgan user 'id'si, test yechgan user 'id'siga to'g'ri kelmadi!!!"}, status=status.HTTP_204_NO_CONTENT)
+                    return Response({"error": "Ro'yhatdan o'tgan user 'id'si, test yechgan user 'id'siga to'g'ri kelmadi!!!"})
 
             except Exception as e:
-                return Response({"error": "Bunday user mavjud emas!!!"}, status=status.HTTP_204_NO_CONTENT)
+                return Response({"error": "Bunday user mavjud emas!!!"})
 
         category = False
         if 'category' in result_data:
@@ -292,7 +290,7 @@ class ResultViewset(viewsets.ModelViewSet):
                 category = Category.objects.get(
                     pk=str(result_data['category']))
             except Exception as e:
-                return Response({"error": "Bunday kategoriya mavjud emas!!!"}, status=status.HTTP_204_NO_CONTENT)
+                return Response({"error": "Bunday kategoriya mavjud emas!!!"})
 
         subcategory = False
         if 'subcategory' in result_data:
@@ -300,7 +298,7 @@ class ResultViewset(viewsets.ModelViewSet):
                 subcategory = Sub_Category.objects.get(
                     pk=str(result_data['subcategory']))
             except Exception as e:
-                return Response({"error": "Bunday kichik kategoriya mavjud emas!!!"}, status=status.HTTP_204_NO_CONTENT)
+                return Response({"error": "Bunday kichik kategoriya mavjud emas!!!"})
 
         try:
             new_result = Result.objects.create(
@@ -315,4 +313,4 @@ class ResultViewset(viewsets.ModelViewSet):
             serializer = ResultSerializer(new_result)
             return Response(serializer.data)
         except Exception as e:
-            return Response({'errors': "Ma'lumot to'liq emas!!!"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'errors': "Ma'lumot to'liq emas!!!"})
