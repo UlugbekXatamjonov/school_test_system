@@ -15,7 +15,7 @@ from user_app.models import Result, Student
 # Viewset for API serializers
 
 
-class SelectCategoryViewset(viewsets.ModelViewSet):
+class SelectCategoryViewset(viewsets.ModelViewSet):     
     """
     ota-ona farzandi uchun category tanlab berishi uchun hamma kategorilar
     """
