@@ -30,7 +30,7 @@ class Sub_CategoryAPISerializer(serializers.ModelSerializer):
     class Meta:
         model = Sub_Category
         fields = ('id', 'name', 'slug', 'category_slug', 'category_id',
-                  'description', 'number_of_questions', 'number_of_answer', 'question')
+                  'description', 'question')
 
 
 class CategoryAPISerializer(serializers.ModelSerializer):
