@@ -1,5 +1,5 @@
-from django.core.mail import EmailMessage
 import os
+from django.core.mail import EmailMessage
 
 class Util:
   @staticmethod

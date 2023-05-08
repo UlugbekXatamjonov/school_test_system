@@ -15,7 +15,6 @@ from datetime import timedelta
 from decouple import config
 from decouple import Csv
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -31,9 +30,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -42,13 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "django.contrib.sites",  # new
+    "django.contrib.sites",
     # global apps
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
 
-    'drf_yasg',  # swagger uchun
+    'drf_yasg',
     "corsheaders",
     'rangefilter',  # admin panelda vaqt oralig'i bo'yicha filterlash uchun
 

@@ -1,7 +1,8 @@
-from rest_framework import serializers
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
+from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 from .models import Student
@@ -24,13 +25,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "age",
             "gender",
             "state",
-            # "photo",
             "email",
             "phone_number",
-
-            "father_number",
-            "father_password",
-            "father_email",
         )
     extra_kwargs={
       'password':{'write_only':True}
@@ -76,7 +72,7 @@ class LogoutSerializer(serializers.Serializer):
             self.fail('bad_token')
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer): 
   test_results = ResultAPISerializer(many=True, read_only=True)
   class Meta:
     model = Student
@@ -84,7 +80,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "slug",
-            # "password",
             "first_name",
             "last_name",
             "age",
@@ -93,15 +88,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "photo",
             "email",
             "phone_number",
-            'student_tests',
-            'test_results',  
-            # "created_at",
-            # "last_login",
-
-            "father_number",
-            "father_password",
-            "father_email",
-            
+            "step_by_subcategory",
+            'test_results',           
         )
 
 
@@ -129,19 +117,19 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         email = attrs.get('email')
-        print(f"attrs ---- {email}")
+        # print(f"attrs ---- {email}")
         
         if Student.objects.filter(email=email).exists():
             user = Student.objects.get(email = email)
-            print(f"user ---- {user.email}")
+            # print(f"user ---- {user.email}")
             uid = urlsafe_base64_encode(force_bytes(user.id))
-            print("--------------------------------------------------------------------------------")
-            print('Encoded UID', uid)
+            # print("--------------------------------------------------------------------------------")
+            # print('Encoded UID', uid)
             token = PasswordResetTokenGenerator().make_token(user)
-            print('Password Reset Token', token)
+            # print('Password Reset Token', token)
             link = 'http://localhost:3000/api/user/reset/'+uid+'/'+token
-            print('Password Reset Link', link)
-            print("-------------------------------------------------------------------------------")
+            # print('Password Reset Link', link)
+            # print("-------------------------------------------------------------------------------")
             # Send EMail
             body = 'Parolingizni tiklash uchun quyidagi havolani bosing '+link
             data = {

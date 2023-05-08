@@ -1,9 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractBaseUser, AbstractUser, BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager, AbstractBaseUser
 from django.core.validators import RegexValidator
 from django.utils.html import mark_safe
-
-from rest_framework.response import Response
 
 from autoslug import AutoSlugField
 
@@ -19,7 +17,6 @@ GENDER_CHOICES = (
 STATUS = (
     ('active', "Faol"),
     ("deactive", "Faol emas"),
-    ("delate", "O'chirish"),
 )
 
 _validate_phone = RegexValidator(
@@ -29,11 +26,17 @@ _validate_phone = RegexValidator(
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, first_name, last_name,  email, age, gender, state, phone_number, father_email,
+    def create_user(self, username, first_name, last_name,  email, age, gender, state, phone_number,
                     password=None, password2=None):
 
         if not username:
             raise ValueError("Foydalanuvchida 'username' bo'lishi shart !")
+
+        step_by_subcategory = {}
+        
+        categories = Category.objects.filter(status='active')
+        for category in categories:
+            step_by_subcategory[category.id] = 1
 
         user = self.model(
             username=username,
@@ -44,7 +47,7 @@ class UserManager(BaseUserManager):
             gender=gender,
             state=state,
             phone_number=phone_number,
-            father_email=father_email
+            step_by_subcategory = step_by_subcategory
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -62,7 +65,6 @@ class UserManager(BaseUserManager):
             gender='man',
             state=1,
             phone_number='+998111111111',
-            father_email='fatheremail@gmail.com'
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -72,33 +74,22 @@ class UserManager(BaseUserManager):
 class Student(AbstractUser):
     slug = AutoSlugField(populate_from='first_name', unique=True)
     age = models.PositiveIntegerField(default=5, verbose_name="yosh")
-    gender = models.CharField(
-        max_length=50, choices=GENDER_CHOICES, verbose_name="jins")
+    gender = models.CharField(max_length=50, choices=GENDER_CHOICES, verbose_name="jins")
     state = models.PositiveIntegerField(default=1, verbose_name="sinf")
-    photo = models.ImageField(upload_to="user_photo", verbose_name="rasm", blank=True, null=True,
-                              default='default_person_picture.png')
+    photo = models.ImageField(upload_to="user_photo", verbose_name="rasm", blank=True, null=True,default='default_person_picture.png')
     email = models.EmailField(unique=True, verbose_name="email")
-    phone_number = models.CharField(max_length=20, null=True, blank=True,  validators=[
-                                    _validate_phone], verbose_name="shaxsiy raqam")
-    status = models.CharField(
-        max_length=30, choices=STATUS, default='active', verbose_name='holati')
-    student_tests = models.ForeignKey(
-        Sub_Category, on_delete=models.CASCADE, related_name="student_tests", blank=True, null=True)
-
-    father_email = models.EmailField(
-        verbose_name='email', blank=True, null=True)
-    father_number = models.CharField(max_length=20, null=True, blank=True, validators=[
-                                     _validate_phone], verbose_name="ota-ona raqami")
-    father_password = models.CharField(
-        max_length=30, null=True, blank=True, verbose_name="ota-ona paroli")
+    phone_number = models.CharField(max_length=20, null=True, blank=True,  validators=[_validate_phone], verbose_name="shaxsiy raqam")
+    status = models.CharField(max_length=30, choices=STATUS, default='active', verbose_name='holati')
+    
+    """ step_by_subcategory --> o'quvchining har bir subcategoriya da yetib kelgan bosqichini aniqlash uchun """
+    step_by_subcategory = models.JSONField(default={}, null=True, blank=True) 
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
     objects = UserManager()
 
-    created_at = models.DateTimeField(
-        auto_now=True, verbose_name="yaratilgan vaqti")
+    created_at = models.DateTimeField(auto_now=True, verbose_name="yaratilgan vaqti")
     updated_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -130,16 +121,10 @@ class Student(AbstractUser):
 
 
 class Result(models.Model):
-    user = models.ForeignKey(Student, on_delete=models.CASCADE,
-                             related_name="test_results", verbose_name="O'quvchi")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,
-                                 related_name="result_category", verbose_name="categoriya")
-    subcategory = models.ForeignKey(Sub_Category, on_delete=models.CASCADE,
-                                    related_name="result_subcategory", verbose_name="kichik kategoriya")
-    ball = models.PositiveIntegerField(
-        default=0, verbose_name="ball", blank=True, null=True,)
-    tashxis = models.CharField(
-        max_length=255, blank=True, null=True, verbose_name="tashxis")
+    user = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="test_results", verbose_name="O'quvchi")
+    subcategory = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, related_name="result_subcategory", verbose_name="kichik kategoriya")
+    ball = models.PositiveIntegerField(default=0, verbose_name="Tog'ri yechgan testlari soni", blank=True, null=True,)
+    try_count = models.PositiveIntegerField(default=5, verbose_name="Yechgan testlari soni")
     test_api = models.JSONField(default={}, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True)
 
@@ -150,3 +135,11 @@ class Result(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
+
+
+{
+    '1',2,
+    '2',1,
+    '4',1,
+    '7',4
+}

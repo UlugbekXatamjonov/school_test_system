@@ -1,34 +1,15 @@
-from .models import Sub_Category, Category, Question, Answer
-
-from user_app.models import Result
 from rest_framework import serializers
 
+from .models import Sub_Category, Category, Question, Answer
+from user_app.models import Result
+
 """ Serializers for API """
-
-
-class SelectSub_CategoryAPISerializer(serializers.ModelSerializer):
-    category_slug = serializers.CharField(source='parent.slug')
-
-    class Meta:
-        model = Sub_Category
-        fields = ('__all__')
-
-
-class SelectCategoryAPISerializer(serializers.ModelSerializer):
-    category = SelectSub_CategoryAPISerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Category
-        fields = ('id', 'name', 'slug', 'description', 'category')
-
-
 class AnswerAPISerializer(serializers.ModelSerializer):
     question_slug = serializers.CharField(source='question_id.slug')
 
     class Meta:
         model = Answer
-        fields = ('id', 'answer', 'slug', 'question_slug',
-                  'question_result', 'photo')
+        fields = ('id', 'answer', 'slug', 'question_slug')
 
 
 class QuestionAPISerializer(serializers.ModelSerializer):
@@ -49,7 +30,7 @@ class Sub_CategoryAPISerializer(serializers.ModelSerializer):
     class Meta:
         model = Sub_Category
         fields = ('id', 'name', 'slug', 'category_slug', 'category_id',
-                  'description', 'number_of_questions', 'time_duration', 'question')
+                  'description', 'number_of_questions', 'number_of_answer', 'question')
 
 
 class CategoryAPISerializer(serializers.ModelSerializer):
@@ -61,22 +42,23 @@ class CategoryAPISerializer(serializers.ModelSerializer):
 
 
 class ResultAPISerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='category.name')
     subcategory_name = serializers.CharField(source='subcategory.name')
 
     class Meta:
         model = Result
-        fields = ('id', 'category_name', 'subcategory_name',
-                  'ball', 'tashxis', 'created_at', 'created_at')
+        fields = ('id', 'subcategory_name',
+                  'ball', 'try_count', 'created_at', 'created_at')
 
 
 """ ----------------------------  CRUID Serialazers ------------------------------------ """
-
 
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Result
         fields = ('__all__')
 
-
 """ ----------------------------  CRUD Serialazers ------------------------------------ """
+
+
+
+
