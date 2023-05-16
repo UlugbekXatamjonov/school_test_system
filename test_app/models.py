@@ -18,8 +18,8 @@ class Category(models.Model):
     description = models.CharField(max_length=350, blank=True, null=True, verbose_name="Kategoriya haqida")
     
     status = models.CharField(max_length=100, choices=STATUS, default='active', verbose_name="Holati")
-    created_at = models.DateTimeField(auto_now=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('created_at','status')
@@ -40,8 +40,8 @@ class Sub_Category(models.Model):
     lesson_link  = models.CharField(max_length=300, verbose_name="Dars uchun link", blank=True, null=True)
 
     status = models.CharField(max_length=100, choices=STATUS, default='active', verbose_name="Holati")
-    created_at = models.DateTimeField(auto_now=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('created_at','status')
@@ -59,16 +59,17 @@ class Question(models.Model):
     photo = models.ImageField(upload_to="question_photo/%Y/%m/%d/", verbose_name="Rasm", blank=True, null=True)
     
     status = models.CharField(max_length=100, choices=STATUS, default='active', verbose_name="Holati")
-    created_at = models.DateTimeField(auto_now=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('-created_at','status')
+        ordering = ('created_at','status')
         verbose_name = "Savol"
         verbose_name_plural = "Savollar"
 
     def __str__(self):
-        return self.question
+        text = f"{self.category_id.name} - {self.question} - {self.slug}"
+        return text
 
 
 class Answer(models.Model):
@@ -78,14 +79,15 @@ class Answer(models.Model):
     true_answer = models.BooleanField(default=False, verbose_name="To'g'ri javob", blank=True, null=True)
     
     status = models.CharField(max_length=100, choices=STATUS, default='active', verbose_name="Holati")
-    created_at = models.DateTimeField(auto_now=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('-created_at','status')
+        ordering = ('created_at','status')
         verbose_name = "Javob"
         verbose_name_plural = "Javoblar"
 
     def __str__(self):
-        return self.answer
+        text = f"{self.question_id.category_id.name} - {self.answer} - {self.slug}"
+        return text
 
