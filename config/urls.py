@@ -64,6 +64,7 @@ urlpatterns = [
 
     path('test/', include('test_app.urls')),
     path('student/', include('user_app.urls')),
+    path('pst-test/', include('psix_test.urls')),
 ]
 
 

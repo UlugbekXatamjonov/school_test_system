@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # local apps
     'test_app',
     'user_app',
+    'psix_test',
 
 ]
 

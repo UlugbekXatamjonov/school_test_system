@@ -6,6 +6,7 @@ from django.utils.html import mark_safe
 from autoslug import AutoSlugField
 
 from test_app.models import Sub_Category, Category
+from psix_test.models import PSTSub_Category
 
 # Create your models here.
 
@@ -137,9 +138,19 @@ class Result(models.Model):
         return f"{self.user.first_name} {self.user.last_name}"
 
 
-{
-    '1',2,
-    '2',1,
-    '4',1,
-    '7',4
-}
+class PSTResult(models.Model):
+    user = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="psttest_results", verbose_name="O'quvchi")
+    subcategory = models.ForeignKey(PSTSub_Category, on_delete=models.CASCADE, related_name="pstresult_subcategory", verbose_name="kichik kategoriya")
+    # ball = models.PositiveIntegerField(default=0, verbose_name="ball")
+    test_api = models.JSONField(default={}, null=True, blank=True)
+    job = models.CharField(max_length=25, blank=True, null=True, verbose_name="kasb")
+    created_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "PSTTest natijasi"
+        verbose_name_plural = "PSTTest natijalari"
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+

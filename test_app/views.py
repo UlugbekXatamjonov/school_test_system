@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from .models import Sub_Category, Category, Question, Answer
 from .serializer import Sub_CategoryAPISerializer, CategoryAPISerializer, QuestionAPISerializer, AnswerAPISerializer, ResultSerializer
 
-from user_app.models import Result, Student
+from user_app.models import Result, Student, PSTResult
 
 # Viewset for API serializers
 
@@ -21,8 +21,10 @@ class CategoryViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        # lastest_result - o'quvchining eng oxirginchi yechgan psix testi natijasi
+        lastest_result = PSTResult.objects.filter(user=user.id).latest('created_at')
         if user.is_authenticated:
-            return Category.objects.filter(status='active')
+            return Category.objects.filter(job=lastest_result.job, status='active')
         return Category.objects.none()
 
 
@@ -36,9 +38,10 @@ class Sub_CategoryViewset(viewsets.ModelViewSet):
         user = self.request.user
         if user.is_authenticated:
             """------------------------------------------------"""
-            categories = Category.objects.filter(status='active')
-            sub_categories = Sub_Category.objects.filter(status='active')
-            sub_categories = sub_categories.filter(parent__in=categories)
+            lastest_result = PSTResult.objects.filter(user=user.id).latest('created_at')
+            categories = Category.objects.filter(job=lastest_result.job, status='active')
+            sub_categories = Sub_Category.objects.filter(parent__in=categories, status='active')
+            # sub_categories = sub_categories.filter(parent__in=categories)
             step_by_subcategory = user.step_by_subcategory
 
             # Umumiy subcategoriyalar ro'yhati
@@ -191,7 +194,7 @@ class ResultViewset(viewsets.ModelViewSet):
             result.try_count += 1
             result.save()
 
-            # Agar kerakli miqdor 80% dan yuqori bo'lsa o'quvchi uchun keyingi bosqichni ochamiz
+            # Agar kerakli miqdor 70% dan yuqori bo'lsa o'quvchi uchun keyingi bosqichni ochamiz
             margin = result.ball / result.try_count
             if margin >= 0.7:
                 for key, value in student.step_by_subcategory.items():

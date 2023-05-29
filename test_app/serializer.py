@@ -38,7 +38,7 @@ class CategoryAPISerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'name', 'slug', 'description', 'category')
+        fields = ('id', 'name', 'job', 'slug', 'description', 'category')
 
 
 class ResultAPISerializer(serializers.ModelSerializer):

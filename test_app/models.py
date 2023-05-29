@@ -10,11 +10,20 @@ STATUS = (
     ("deactive", "Faol emas"),
 )
 
+JOB_TYPES = (
+    ('tabiat', "Tabiat"),
+    ('texnika', "texnika"),
+    ('belgi','Belgi'),
+    ('sanat',"San'at"),
+    ('inson', "Inson"),
+)
+
 timeDurationRegex = RegexValidator(regex = r"^\d{1,3}$")
         
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True, verbose_name="Katta kategoriya")
     slug = AutoSlugField(populate_from = 'name', unique=True)
+    job = models.CharField(max_length=30, verbose_name='Kasb', blank=True, null=True, choices=JOB_TYPES, default='tabiat')
     description = models.CharField(max_length=350, blank=True, null=True, verbose_name="Kategoriya haqida")
     
     status = models.CharField(max_length=100, choices=STATUS, default='active', verbose_name="Holati")

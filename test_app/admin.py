@@ -6,8 +6,8 @@ from .models import Sub_Category, Category, Question, Answer
 
 @admin.register(Category)
 class CategoryAdmin(admin. ModelAdmin):
-    list_display = ('name','id','description','status','created_at')
-    list_filter = ('status','created_at')
+    list_display = ('name','id','job','description','status','created_at')
+    list_filter = ('status','created_at', 'job')
 
 @admin.register(Sub_Category)
 class Sub_CategoryAdmin(admin.ModelAdmin):
