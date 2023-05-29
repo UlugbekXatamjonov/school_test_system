@@ -9,6 +9,7 @@ from .models import Student
 from .utils import Util
 
 from test_app.serializer import ResultAPISerializer
+from psix_test.serializers import PSTResultSerializer
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -74,6 +75,7 @@ class LogoutSerializer(serializers.Serializer):
 
 class UserProfileSerializer(serializers.ModelSerializer): 
   test_results = ResultAPISerializer(many=True, read_only=True)
+  psttest_results = PSTResultSerializer(many=True, read_only=True)
   class Meta:
     model = Student
     fields = (
@@ -89,7 +91,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "email",
             "phone_number",
             "step_by_subcategory",
-            'test_results',           
+            'test_results',   
+            'psttest_results',        
         )
 
 
