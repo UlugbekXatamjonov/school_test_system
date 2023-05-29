@@ -80,6 +80,7 @@ class Student(AbstractUser):
     photo = models.ImageField(upload_to="user_photo", verbose_name="rasm", blank=True, null=True,default='default_person_picture.png')
     email = models.EmailField(unique=True, verbose_name="email")
     phone_number = models.CharField(max_length=20, null=True, blank=True,  validators=[_validate_phone], verbose_name="shaxsiy raqam")
+    permission_to_test = models.BooleanField(default=False, null=True, blank=True)
     status = models.CharField(max_length=30, choices=STATUS, default='active', verbose_name='holati')
     
     """ step_by_subcategory --> o'quvchining har bir subcategoriya da yetib kelgan bosqichini aniqlash uchun """

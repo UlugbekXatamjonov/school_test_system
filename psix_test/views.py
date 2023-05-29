@@ -121,6 +121,9 @@ class PSTResultViewset(ModelViewSet):
 
 
         """ Yangi obyekt yaratish  """
+        user.permission_to_test = True
+        user.save()
+
         try:
             new_result = PSTResult.objects.create(
                 user = user,

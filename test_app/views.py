@@ -22,9 +22,10 @@ class CategoryViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         # lastest_result - o'quvchining eng oxirginchi yechgan psix testi natijasi
-        lastest_result = PSTResult.objects.filter(user=user.id).latest('created_at')
-        if user.is_authenticated:
-            return Category.objects.filter(job=lastest_result.job, status='active')
+        if user.permission_to_test:
+            lastest_result = PSTResult.objects.filter(user=user.id).latest('created_at')
+            if user.is_authenticated:
+                return Category.objects.filter(job=lastest_result.job, status='active')
         return Category.objects.none()
 
 
@@ -38,26 +39,28 @@ class Sub_CategoryViewset(viewsets.ModelViewSet):
         user = self.request.user
         if user.is_authenticated:
             """------------------------------------------------"""
-            lastest_result = PSTResult.objects.filter(user=user.id).latest('created_at')
-            categories = Category.objects.filter(job=lastest_result.job, status='active')
-            sub_categories = Sub_Category.objects.filter(parent__in=categories, status='active')
-            # sub_categories = sub_categories.filter(parent__in=categories)
-            step_by_subcategory = user.step_by_subcategory
+            if user.permission_to_test:
+                lastest_result = PSTResult.objects.filter(user=user.id).latest('created_at')
+                categories = Category.objects.filter(job=lastest_result.job, status='active')
+                sub_categories = Sub_Category.objects.filter(parent__in=categories, status='active')
+                # sub_categories = sub_categories.filter(parent__in=categories)
+                step_by_subcategory = user.step_by_subcategory
 
-            # Umumiy subcategoriyalar ro'yhati
-            total_subcategory = [] 
+                # Umumiy subcategoriyalar ro'yhati
+                total_subcategory = [] 
 
-            for key, value in step_by_subcategory.items():
-                # tanlangan bitta categoriyaga bog'langan subcategoriyalar ro'yhati
-                selected_subcategory = [] 
-                for subcategory in sub_categories:
-                    if int(key) == subcategory.parent.id:
-                        selected_subcategory.append(subcategory)
-                # kerakli miqdorda olingan subcategoriyalarni umumiy categoriyalarga qo'shamiz
-                total_subcategory += selected_subcategory[:value]  
+                for key, value in step_by_subcategory.items():
+                    # tanlangan bitta categoriyaga bog'langan subcategoriyalar ro'yhati
+                    selected_subcategory = [] 
+                    for subcategory in sub_categories:
+                        if int(key) == subcategory.parent.id:
+                            selected_subcategory.append(subcategory)
+                    # kerakli miqdorda olingan subcategoriyalarni umumiy categoriyalarga qo'shamiz
+                    total_subcategory += selected_subcategory[:value]  
 
-            """------------------------------------------------"""
-            return total_subcategory
+                """------------------------------------------------"""
+                return total_subcategory
+            return Sub_Category.objects.none()
         return Sub_Category.objects.none()
 
 
