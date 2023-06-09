@@ -135,10 +135,11 @@ class ResultViewset(viewsets.ModelViewSet):
             message = ""
             if result_ball == 5: # Agar hammasini to'g'ri topgan bo'lsa
                 for key, value in student.step_by_subcategory.items():
-                    if int(key) == data_subcategory.id:
-                        student.step_by_subcategory[key] += 1                    
-                        student.save()
-                        message = "Tabriklaymiz siz keyingi bosqichga o'tdingiz !"
+                    if int(key) == data_subcategory.parent.id and data_subcategory.id == student.step_by_subcategory[key]:
+                            student.step_by_subcategory[key] += 1                    
+                            student.save()
+                            message = "Tabriklaymiz siz keyingi bosqichga o'tdingiz !"
+                    message = "Tabriklaymiz siz keyingi bosqichga o'tdingiz !"
         except:
             return Response({'error': "103 - xatolik turi aniqlandi(ResultViewset)"})
 
@@ -201,10 +202,11 @@ class ResultViewset(viewsets.ModelViewSet):
             margin = result.ball / result.try_count
             if margin >= 0.7:
                 for key, value in student.step_by_subcategory.items():
-                    if int(key) == data_subcategory.id:
+                    if int(key) == data_subcategory.parent.id and result.subcategory.id == student.step_by_subcategory[key]:
                         student.step_by_subcategory[key] += 1                    
                         student.save()
                         message = "Tabriklaymiz siz keyingi bosqichga o'tdingiz !"
+                    message = "Tabriklaymiz siz keyingi bosqichga o'tdingiz !"
         except:
             return Response({"error":"105-xatolik turi aniqlandi(ResultViewset)"})
 
